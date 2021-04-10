@@ -1,0 +1,201 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} {{ user.username }} {% endblock %}
+{% block content %}
+
+
+
+
+<div class="profile">
+  <div class="help_text"></div>
+  {% if not request.user.is_authenticated or not request.user.profile.super_profile %}
+  <div style="padding-top: 80px;"></div>
+  {% endif %}
+  {% if request.user.profile.super_profile %}
+  <div>
+    <div id="make_super">
+      <div></div>
+    </div>
+  </div>
+  <div class="settings">
+    <div><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;settings <span class="fa fa-caret-down"
+        title="Toggle dropdown menu"></span></div>
+
+
+    <ul class="dropdown-menu">
+      <li> <a href="{% url 'update_info_profile' %}">edit profile</a></li>
+      <li> <a href="{% url 'update_info_user' %}">edit user</a></li>
+      <li><a href="{% url 'change_password' %}"> change password</a></li>
+      {% if profile.website %}
+      <li><a href="{{ profile.website }}"> webite</a></li>
+      {% endif %}
+      <li class="divider"></li>
+      <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class='picture'>
+    <img id="clip1" src=" {{ profile.photo.url }} " alt="img of {{ user.username }}" />
+  </div>
+
+  <h4>{{ user.username }}</h4>
+  <p>{{ user.first_name }} {{ user.last_name }}</p>
+  <p><a href="mailto:{{ user.email }}">
+      {{ user.email }}
+    </a></p>
+  <p>{{ profile.bio }}</p>
+
+  <ul style="list-style:none ; ">
+    <li style="margin-left: 10%;">
+      <i class="flag2x {{ profile.country.flag_css }}"></i>
+      {{ profile.country.name }}</li>
+  </ul>
+
+</div>
+
+
+<div style="margin: 20px auto; border-top: 2px solid rgba(0, 0, 0, 0.9); width:60%;">
+</div>
+
+
+<!-- posts -->
+
+
+
+<section>
+  {% if posts %}
+  {% for  post in posts %}
+  <article class="articles">
+
+    {% if post.picture %}
+    <a href="{% url 'post' post.id  post.status %}">
+      <img class='post_img' src="{{ post.picture.url }}">
+    </a>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <i class="fa fa-bookmark fa-2x save" style=" margin-bottom: -40px; margin-right: 5px;" id="{{ post.id }}"
+      aria-hidden="true"></i>
+    {% if request.user == user %}
+    <span class="edit_span">
+      <input value="..." type="button" />
+      <div class="edit_list">
+        <ul>
+          <li><a href="{% url 'update_post' post.id post.status %}">update</a></li>
+          <li><a href="#">delete</a></li>
+        </ul>
+      </div>
+    </span>
+
+
+    {% endif %}
+    {% endif %}
+    <div class='post'>
+      <a href="{% url 'post' post.id  post.status %}" style="text-decoration: none">
+        <h2>{{ post.title }}</h2>
+      </a>
+      <footer class="post_user_info" style=" margin: 12px auto;">
+
+      </footer>
+      <div style="margin-right: 5px; margin-bottom: 12px;">
+        <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 4px; "></i>
+          {{ post.created | date:"l d F Y , H:i"}}</sub>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+  {% else %}
+  <h2>Nothing To Show</h2>
+  {% endif %}
+</section>
+
+
+
+{% if user.is_authenticated %}
+<script>
+  const data = {
+    id: "{{ user.profile.id }}",
+    csrfmiddlewaretoken: "{{ csrf_token }}",
+  }
+  const add_style = (bool) => {
+    if (bool) {
+      $("#make_super div").css({
+        float: "right",
+        background: "rgb(20, 240, 20)",
+      });
+      $("#make_super").css({
+        background: "#fafafa",
+      });
+      $(".help_text").html("Super Account");
+    } else {
+      $("#make_super div").css({
+        float: "left",
+        background: "rgb(240, 20, 20)",
+      });
+      $("#make_super").css({
+        background: "#453435",
+      });
+      $(".help_text").html("Normal Account");
+    }
+  };
+  $("#make_super").click(() => {
+    $.ajax({
+      type: "POST",
+      url: '{% url "super_profile_api" %}',
+      data: data,
+      dataType: "json",
+      success: (e) => {
+        add_style(e.is_super_profile);
+      },
+    });
+  });
+  $.ajax({
+    type: "GET",
+    url: "{% url 'is_super_profile_api' %}",
+    data: data,
+    dataType: "json",
+    success: (e) => {
+      add_style(e.is_super_profile);
+    },
+  });
+
+  $('.save').click((e) => {
+    item = e.target
+    $.ajax({
+      type: 'POST',
+      url: '{% url "save_api" %}',
+      data: {
+        'id': e.target.id,
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      dataType: 'json',
+      success: (e) => {
+
+        $(item).toggleClass('fa-bookmark-o')
+      }
+    })
+  })
+  $.ajax({
+    type: "GET",
+    url: "{% url 'is_saved_api' %}",
+    data: {
+      id: '',
+      tag: '',
+      query: '',
+      profile_id: '{{ profile.id }}',
+    },
+    dataType: "json",
+    success: (e) => {
+      const items = $('.articles .save')
+      for (let i = 0; i < e.items.length; i++) {
+        if (e.items[i])
+          $(items[i]).removeClass('fa-bookmark-o')
+        else
+          $(items[i]).addClass('fa-bookmark-o')
+
+      }
+    },
+  });
+</script>
+{% endif %}
+
+{% endblock %}

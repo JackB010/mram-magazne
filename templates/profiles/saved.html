@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %} saved {% endblock %}
+
+{% block content %}
+
+<section>
+    {% if posts %}
+    {% for  post in posts %}
+    <article class="articles">
+
+        {% if post.picture %}
+        <a href="{% url 'post' post.id  post.status %}">
+            <img class='post_img' src="{{ post.picture.url }}">
+        </a>
+        {% endif %}
+        <div class='post'>
+
+            <a href="{% url 'post' post.id  post.status %}" style="text-decoration: none">
+                <h2>{{ post.title }}</h2>
+            </a>
+
+            <footer class="post_user_info" style=" margin-top: 12px;">
+                <a href="{% url 'profile' post.user.profile.id %}"><img src="{{ post.user.profile.photo.url }}"></a>
+                <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
+                {% if user.is_authenticated %}
+                <i class="fa fa-bookmark fa-2x save" style="position: relative; right: 68%;" id="{{ post.id }}"
+                    aria-hidden="true"></i>
+                {% endif %}
+            </footer>
+
+            <div style="margin-right: 5px; height: 40px;">
+                <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 4px; "></i>
+                    {{ post.created | date:"l d F Y , H:i"}}</sub>
+            </div>
+
+        </div>
+    </article>
+
+    {% endfor %}
+
+    {% else %}
+    <h2>Nothing To Show</h2>
+    {% endif %}
+</section>
+
+<script>
+    $('.save').click(() => {
+        item = event.target.parentElement.parentElement.parentElement
+        itself = event.target
+        $.ajax({
+            type: 'POST',
+            url: '{% url "save_api" %}',
+            data: {
+                id: event.target.id,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            dataType: 'json',
+            success: (e) => {
+                $(itself).toggleClass('fa-bookmark-o')
+                $(item).fadeOut(500, () => $(item).remove())
+            }
+        })
+    })
+    $.ajax({
+        type: "GET",
+        url: "{% url 'is_saved_profile_api' %}",
+        data: {},
+        dataType: "json",
+        success: (e) => {
+            const items = $('.item .post .save')
+            for (let i = 0; i < e.items.length; i++) {
+                if (e.items[i])
+                    $(items[i]).css({
+                        color: "white",
+                        background: "blue",
+                    });
+                else
+                    $(items[i]).css({
+                        color: "black",
+                        background: "red",
+                    });
+
+            }
+        },
+    });
+</script>
+{% endblock %}

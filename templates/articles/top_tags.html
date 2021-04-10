@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% load static %}
+{% block title %} Top Tags {% endblock %}
+{% block content %}
+{% for i in tags %}
+<div class="top_tags"><a href="{% url 'tags' i.tag %}">{{ i.tag }}</a></div>
+{% endfor %}
+<style>
+    .top_tags{
+        
+    }
+</style>
+{% endblock %}

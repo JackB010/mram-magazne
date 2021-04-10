@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+{% block content %}
+<!-- --------------------- -->
+
+{% if tag %}
+<h2 style="margin-bottom: 20px;"> {{ tag }}</h2>
+{% elif query %}
+<h2 style="margin-bottom: 20px;"> {{ query }}</h2>
+{% endif %}
+<!-- --------------------- -->
+
+
+<section>
+    {% if posts %}
+    {% for  post in posts %}
+    <article class="articles">
+
+        {% if post.picture %}
+        <a href="{% url 'post' post.id  post.status %}">
+            <img class='post_img' src="{{ post.picture.url }}">
+        </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <i class="fa fa-bookmark fa-2x save" style=" margin-bottom: -40px; margin-right: 5px;" id="{{ post.id }}"
+            aria-hidden="true"></i>
+        {% if post.user == user %}
+        <span class="edit_span">
+            <input value="..." type="button" />
+            <div class="edit_list">
+                <ul>
+                    <li><a href="{% url 'update_post' post.id post.status %}">update</a></li>
+                    <li><a href="#">delete</a></li>
+                </ul>
+            </div>
+        </span>
+
+
+
+        {% endif %}
+        {% endif %}
+        <div class='post'>
+            <a href="{% url 'post' post.id  post.status %}" style="text-decoration: none">
+                <h2>{{ post.title }}</h2>
+            </a>
+            <footer class="post_user_info" style=" margin-top: 12px;">
+                <a href="{% url 'profile' post.user.profile.id %}"><img src="{{ post.user.profile.photo.url }}"></a>
+                <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
+            </footer>
+
+            <div style="margin-right: 5px; height: 40px;">
+                <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 4px; "></i>
+                    {{ post.created | date:"l d F Y , H:i"}}</sub>
+            </div>
+
+        </div>
+    </article>
+
+    {% endfor %}
+
+    {% else %}
+    <h2>Nothing To Show</h2>
+    {% endif %}
+</section>
+
+
+<script>
+    $('.save').click((e) => {
+        item = e.target
+        $.ajax({
+            type: 'POST',
+            url: '{% url "save_api" %}',
+            data: {
+                'id': e.target.id,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            dataType: 'json',
+            success: (e) => {
+                $(item).toggleClass('fa-bookmark-o')
+            }
+        })
+    })
+    $.ajax({
+        type: "GET",
+        url: "{% url 'is_saved_api' %}",
+        data: {
+            id: '',
+            tag: '{{ tag }}',
+            query: '{{query }}',
+            top: '{{ top }}',
+        },
+
+        dataType: "json",
+        success: (e) => {
+            const items = $('.articles .save')
+            for (let i = 0; i < e.items.length; i++) {
+                if (e.items[i]) $(items[i]).removeClass('fa-bookmark-o')
+                else $(items[i]).addClass('fa-bookmark-o')
+
+            }
+        },
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+{% load i18n %}
+<html lang="ar-DZ ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'css/_base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'flags/sprite-hq.css' %}" />
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body >
+    <!-- search -->
+    {% include 'layout/navbar.html'%}
+    <!-- messages -->
+
+    <div class='messages'>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="{{ message.tags }}"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <!-- root content -->
+    <div class="root">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- footer -->
+    {% include 'layout/footer.html'%}
+    <script src="{% static 'js/base.js' %}"></script>
+</body>
+
+</html>

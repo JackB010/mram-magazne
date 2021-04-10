@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+<div class="root_forms">
+    <h4>editing on {{ post.title }}</h4>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }} {{ form.media }}
+        <input type="submit" value="create" class="submit">
+    </form>
+</div>
+<style>
+    ul {
+        list-style-type: none;
+    }
+
+    .root_forms {
+        width: 100%;
+        margin-bottom: 200px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+
+{% block content %}
+<div class="root_forms">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %} {{ form_a.as_p }} {{ form_a.media }} {{ form_t.as_p }}
+        <div id="show_tag">
+        </div>
+        <input type="submit" value="create" class="submit">
+    </form>
+</div>
+<style>
+    ul {
+        list-style-type: none;
+    }
+
+    #id_tag {
+        color: blue;
+    }
+
+    .root_forms {
+        width: 100%;
+        margin-bottom: 100px;
+    }
+
+    #show_tag {
+        /* width: 100%; */
+        word-wrap: break-word;
+    }
+</style>
+
+
+
+<script>
+    $('#id_tag').keyup((event) => {
+        let tags = event.target.value.split(' ').filter(e => e)
+        let thereIsOne = false;
+        for (let i of $('#show_tag p')) {
+            if ($(i).text() === tags[tags.length - 1]) {
+                thereIsOne = true
+                break
+            }
+        }
+        if (!thereIsOne)
+            $('#show_tag').append(`<p>${tags[tags.length-1]}</p>`)
+
+        for (let i of $('#show_tag p')) {
+            if (!tags.includes($(i).text())) {
+                $(i).fadeOut(0, () => $(i).remove())
+            }
+        }
+
+    })
+</script>
+{% endblock %}
