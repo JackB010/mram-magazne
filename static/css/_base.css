@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital@1&display=swap');
 
 * {
   box-sizing: border-box;
@@ -17,6 +16,9 @@ a:visited {
   text-decoration: none;
   color: rgb(0, 140, 255);
   font-size: 18px;
+}
+a:active, input:focus, button:active{
+  outline: none;
 }
 i:active {
   transform: scale(1.1);
@@ -470,7 +472,7 @@ nav div {
   position: fixed;
   width: 100%;
   background-color: rgba(255,255,255,1);
-  z-index: 1;
+  z-index: 101;
   height: 80px;
   box-shadow: #777 0 1px 10px;
 }
@@ -492,22 +494,23 @@ nav ul li a:hover{
   box-shadow: #aaa 0 1px 10px;
 }
 
-nav div ul li:first-child a:hover{
+nav div ul li:first-child a:hover {
   background-color: white;
-  color: rgb(86, 12, 121);
   box-shadow: none;
-  padding: 20px 0;
-  font-size: 34px;
+  padding: 0;
 }
-nav div ul li:first-child a{
-  font-size: 34px;
+nav div ul img{
+  height: 70px;
+  border: rgb(86, 12, 121) 1px solid;
+  border-radius: 50%;
+  outline:none;
+  box-shadow: rgb(51, 5, 51)   0 2px 1px 3px ; 
+             
+  
 }
-nav div ul li:first-child a:active{
-  outline: none;
-}
+
 nav div ul li:first-child  {
-  font-family: Amiri;
-  margin-top: -60px;
+  margin-top: -56px;
   padding-right: 20px;
 }
 
@@ -526,10 +529,6 @@ nav div form label input {
   height: 30px;
   width: 220px;
 }
-nav div form label input:focus{
-
-  outline: none;
-}
 nav div form {
   margin-top: 20px;
   padding-right :20px;
@@ -538,7 +537,7 @@ nav div form {
 /* ######################################## */
 /* ###########    FOOTER     ############### */
 
-footer{
+.nav-footer{
 position: relative;
 top: 100%;
 width: 100%;
@@ -559,20 +558,6 @@ background-color: #333;
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   .delete_comment {
     float: left;
     border: none;
@@ -587,7 +572,6 @@ background-color: #333;
     margin: 8px 0;
     color: rgb(75, 65, 65);
   }
- 
   .comment {
     padding-right: 30px;
   }
@@ -605,8 +589,6 @@ background-color: #333;
     margin: 0 auto;
     font-size: 29px;
   }
-
-
 
   #post_info img,
   .user img,

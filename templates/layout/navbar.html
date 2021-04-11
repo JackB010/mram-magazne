@@ -1,6 +1,6 @@
-
+{% load static %}
 <nav>
-    <div>=
+    <div>
         {% block search %}
         <form action="{% url 'search' %}" method="GET" class='search_form'>
             <label>
@@ -11,7 +11,7 @@
         {% endblock %}
 
             <ul>
-                <li><a href="{% url  'posts' %}" id="home" >مرام</a></li>
+                <li><a href="{% url  'posts' %}" id="home" ><img src="{% static 'imgs/brand.jpg' %}"></a></li>
                 <li><a href="{% url 'top_tags' %}">أفضل المواضيع</a></li>
                 <li><a href="{% url 'top_posts' %}">أفضل المقالات</a></li>
                 {% if request.user.is_authenticated %}
