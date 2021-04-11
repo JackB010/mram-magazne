@@ -1,4 +1,5 @@
 <nav>
+    <div>
         {% block search %}
         <form action="{% url 'search' %}" method="GET" class='search_form'>
             <label>
@@ -13,10 +14,13 @@
                 <li><a href="{% url 'top_posts' %}">أفضل المقالات</a></li>
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a></li>
+                {% if request.user.profile.super_profile %}
                 <li><a href="{% url 'create_post' %}">إنشاء</a></li>
+                {% endif %}
                 <li><a href="{% url  'logout' %}">تسجيل الخروج</a></li>
                 {% else %}
                 <li><a href="{% url  'login' %}">تسجيل الدخول</a></li>
                 {% endif %}
             </ul>
+    </div>
 </nav>

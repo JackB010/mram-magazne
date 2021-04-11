@@ -438,7 +438,7 @@ h4,
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 130px;
+ min-width: 130px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   line-height: 8px;
   text-align: center;
@@ -461,29 +461,55 @@ h4,
 }
 
 
-
-
 /* ################ nav ################### */
 nav{
+  height: 300px;
+  background: url("/static/imgs/bg.jpg") 50% 0 no-repeat fixed;
+}
+nav div {
   position: fixed;
-  width: 98%;
-  margin: 0 auto;
-  background: #222;
+  width: 100%;
+  background-color: rgba(255,255,255,1);
+  z-index: 1;
   height: 80px;
-  z-index: 10;
-  top: 0;
-  right:50%;
-  transform: translate(50%,100%);
+  box-shadow: #777 0 1px 10px;
 }
 nav ul li{
   display: inline;
   float: left;
   padding:10px;
 }
-nav #home{
-  font-family: Amiri;
-  font-size: 24px;
+nav ul li :is(a, a:visited){
+  color: rgb(86, 12, 121);
+  margin: 0 4px;
 }
+nav ul li a:hover{
+  background-color:rgb(86, 12, 121);
+  color:white;
+  padding: 20px 4px;
+  font-size: 17px;
+  box-shadow: #aaa 0 1px 10px;
+}
+
+nav div ul li:first-child a:hover{
+  background-color: white;
+  color: rgb(86, 12, 121);
+  box-shadow: none;
+  padding: 20px 0;
+  font-size: 34px;
+}
+nav div ul li:first-child a{
+  font-size: 34px;
+}
+nav div ul li:first-child a:active{
+  outline: none;
+}
+nav div ul li:first-child  {
+  font-family: Amiri;
+  margin-top: -28px;
+  padding-right: 20px;
+}
+
 
 /* ######################################## */
 
@@ -506,18 +532,31 @@ nav #home{
 
 
 
+
+
+
+
+
+
+
+  .delete_comment {
+    float: left;
+    border: none;
+    color: red;
+    cursor: pointer;
+    margin: 8px 0 0 4px;
+  }
   .comment_item {
     background: whitesmoke;
     box-shadow: 0px 0px 2px;
     border-radius: 3px;
+    margin: 8px 0;
     color: rgb(75, 65, 65);
-    margin:10px auto;
-
   }
- .comment{
-  padding-right: 30px;
- }
-
+ 
+  .comment {
+    padding-right: 30px;
+  }
   .user,
   #post_info .post_user_info {
     border: none;
@@ -529,10 +568,11 @@ nav #home{
     margin: auto ;
   }
   legend{
-    margin: 40px auto;
-    font-size: 24px;
-    padding: 8px;
+    margin: 0 auto;
+    font-size: 29px;
   }
+
+
 
   #post_info img,
   .user img,
@@ -585,19 +625,19 @@ nav #home{
   #title {
     margin-bottom: 20px;
     font-size: 30px;
-    font-family: Amiri;
   }
 
   #sub_title::first-line {
     font-size: 22px;
   }
 
+  #post_body {
+    text-align: justify;
+    color: black;
 
-  .save_like {
-    margin-top: 20px;
-    width: 70%;
-    margin: 0 auto;
   }
+
+
   .save_like div {
     display: inline;
     margin: 20px 20px;
@@ -616,6 +656,7 @@ nav #home{
     color: rgb(97, 6, 97);
     cursor: pointer;
   }
+
 
   i {
     cursor: pointer;
