@@ -1,13 +1,15 @@
+
 <nav>
-    <div>
+    <div>=
         {% block search %}
         <form action="{% url 'search' %}" method="GET" class='search_form'>
             <label>
-                <input name="q" type="search" placeholder="بحث" aria-label="Search">
-                <button type="submit"><i class="fa fa-search fa-1x" aria-hidden="true"></i> بحث</button>
+                <input name="q" type="search"  aria-label="Search">
+                <button type="submit"><i class="fa fa-search fa-1x" aria-hidden="true"></i></button>
             </label>
         </form>
         {% endblock %}
+
             <ul>
                 <li><a href="{% url  'posts' %}" id="home" >مرام</a></li>
                 <li><a href="{% url 'top_tags' %}">أفضل المواضيع</a></li>
@@ -15,7 +17,7 @@
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a></li>
                 {% if request.user.profile.super_profile %}
-                <li><a href="{% url 'create_post' %}">إنشاء</a></li>
+                <li><a href="{% url 'create_post' %}">إنشاء مقال</a></li>
                 {% endif %}
                 <li><a href="{% url  'logout' %}">تسجيل الخروج</a></li>
                 {% else %}
@@ -23,4 +25,5 @@
                 {% endif %}
             </ul>
     </div>
+
 </nav>

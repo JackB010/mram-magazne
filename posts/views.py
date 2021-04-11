@@ -165,7 +165,7 @@ def delete_comment_api(request):
             comment.active = False
             comment.save()
             num = comment.article.comments.filter(active=True).count()
-        return HttpResponse(json.dumps({'comments_count':num}), content_type='application/json')
+        return HttpResponse(json.dumps({'comments_count': num}), content_type='application/json')
 
 
 @ login_required
@@ -178,10 +178,10 @@ def comment_api(request):
         obj = Article.objects.get(id=id)
         if comment.replace(' ', '') == '':
             return HttpResponse()
-        num = Comment.objects.filter(Q(article=obj) and Q(active=True)).count()+1
+        num = Comment.objects.filter(Q(article=obj) & Q(active=True)).count()+1
         obj = Comment.objects.create(article=obj, user=user, comment=comment)
 
-        return HttpResponse(json.dumps({'comment': obj.comment, 'id': str(obj.id), 'comments_count':num}), content_type='application/json')
+        return HttpResponse(json.dumps({'comment': obj.comment, 'id': str(obj.id), 'comments_count': num}), content_type='application/json')
 
 
 @ login_required
