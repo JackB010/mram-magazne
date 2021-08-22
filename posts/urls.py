@@ -1,12 +1,13 @@
 from django.urls import path
-from .views import (posts_list,
+from .feeds import LatestArticlesFeed
+from .views import (PostsList,
                     post,
                     create_post,
                     update_post,
                     search,
                     post_by_tag,
                     top_posts,
-                    top_tags,
+                    top_tags_api,
                     # api
                     delete_post_api,
                     like_api,
@@ -21,7 +22,7 @@ from .views import (posts_list,
 
 
 urlpatterns = [
-    path('', posts_list, name='posts'),
+    path('', PostsList.as_view(), name='posts'),
     path('<uuid:id>/<str:status>/', post, name='post'),
     path('search/', search, name='search'),
     path('create/', create_post, name='create_post'),
@@ -29,7 +30,8 @@ urlpatterns = [
     path('update/<uuid:id>/<str:status>/', update_post, name='update_post'),
     path('tag/<str:tag>/', post_by_tag, name='tags'),
     path('top/', top_posts, name='top_posts'),
-    path('top/tags/', top_tags, name='top_tags'),
+    path('feed/', LatestArticlesFeed(), name='post_feed'), 
+#     path('top/tags/', top_tags, name='top_tags'),
 
 
     # api
@@ -45,6 +47,7 @@ urlpatterns = [
          super_profile_api, name='super_profile_api'),
     path('api/is_super/profile/',
          is_super_profile_api, name='is_super_profile_api'),
+     path('api/top/tags/', top_tags_api, name='top_tags_api'),
 
 
 

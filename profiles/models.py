@@ -45,13 +45,14 @@ class Profile(models.Model):
         ordering = ['-created']
 
     def clean(self, *args, **kwargs):
-        if self.photo.height < 300 and self.photo.width < 300:
+        print(self.photo.height )
+        if self.photo.height <= 200 and self.photo.width <= 200:
             raise ValidationError(
                 _('{} size does not match').format(self.photo.name))
 
     def save(self, *args, **kwargs):
-        super().save()
-        size = (200, 200)
+        super().save(*args, **kwargs)
+        size = (300, 300)
         img = Image.open(self.photo.path)
         img.thumbnail(size)
         img.save(self.photo.path)

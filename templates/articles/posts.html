@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Home {% endblock %}
+{% block title %} المجلة الاٍلكترونية مرام {% endblock %}
 {% block content %}
 <!-- --------------------- -->
 
@@ -11,12 +11,10 @@
 {% endif %}
 <!-- --------------------- -->
 
-
 <section>
     {% if posts %}
     {% for  post in posts %}
     <article class="articles">
-
         {% if post.picture %}
         <a href="{% url 'post' post.id  post.status %}">
             <img class='post_img' src="{{ post.picture.url }}">
@@ -27,42 +25,66 @@
             aria-hidden="true"></i>
         {% if post.user == user %}
         <span class="edit_span">
-            <input value="..." type="button" />
+            <button>...</button>
             <div class="edit_list">
                 <ul>
-                    <li><a href="{% url 'update_post' post.id post.status %}">update</a></li>
-                    <li><a href="#">delete</a></li>
+                    <li><a href="{% url 'update_post' post.id post.status %}">تعديل</a></li>
+                    <li><a href="#">حذف</a></li>
                 </ul>
             </div>
         </span>
-
-
-
         {% endif %}
         {% endif %}
         <div class='post'>
             <a href="{% url 'post' post.id  post.status %}" style="text-decoration: none">
                 <h2>{{ post.title }}</h2>
             </a>
+            {% if status != "DRA" %}
             <footer class="post_user_info" style=" margin-top: 12px;">
                 <a href="{% url 'profile' post.user.profile.id %}"><img src="{{ post.user.profile.photo.url }}"></a>
                 <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
             </footer>
+            {% else %}
+            <footer class="post_user_info" style=" margin: 12px auto;">
+            </footer>
+            {% endif %}
 
-            <div style="margin-right: 5px; height: 40px;">
+            <div>
                 <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 4px; "></i>
                     {{ post.created | date:"l d F Y , H:i"}}</sub>
             </div>
-
         </div>
     </article>
+    {% endfor %}
+    {% else %}
+    <div style="margin: 50px;">
+        <h2>أسف لا يوجد أي مقال !! </h2>
+    </div>
+    {% endif %}
+</section>
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page=1" rel="page">الأولة</a>
+    <a href="?page={{ page_obj.previous_page_number }}" rel="page">السابقة</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <a href="#" class="active" rel="page">{{ num }}</a>
+
+    {% elif  num > page_obj.number|add:'-3' and  num < page_obj.number|add:'3' %}
+    <a href="?page={{num }}" rel="page">{{ num }}</a>
+    {% endif %}
 
     {% endfor %}
 
-    {% else %}
-    <h2>Nothing To Show</h2>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" rel="page">التالية</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}" rel="page"> الأخيرة</a>
     {% endif %}
-</section>
+</div>
+{% endif %}
 
 
 <script>
@@ -89,15 +111,14 @@
             tag: '{{ tag }}',
             query: '{{query }}',
             top: '{{ top }}',
+            status: '{{ status }}'
         },
-
         dataType: "json",
         success: (e) => {
             const items = $('.articles .save')
             for (let i = 0; i < e.items.length; i++) {
                 if (e.items[i]) $(items[i]).removeClass('fa-bookmark-o')
                 else $(items[i]).addClass('fa-bookmark-o')
-
             }
         },
     });

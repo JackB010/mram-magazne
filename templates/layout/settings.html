@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} - الصفحة الشخصية{% endblock %}
+{% block content %}
+<div class="root_forms psettings">
+    <ul>
+        <li> <a href="{% url 'update_info_profile' %}"><i class="fa fa-edit "></i> edit profile</a></li>
+        <li> <a href="{% url 'update_info_user' %}"><i class="fa fa-user "></i> edit user</a></li>
+        <li><a href="{% url 'change_password' %}"><i class="fa fa-pencil"></i> change password</a></li>
+        <li><a href="{% url 'draft_posts'  user.profile.id %}"><i class="fa fa-pencil"></i> Draft</a></li>
+        <li><a href="{% url 'saved'  %}"> <i class="fa fa-bookmark "></i> Saved</a></li>
+    </ul>
+</div>
+{% endblock %}

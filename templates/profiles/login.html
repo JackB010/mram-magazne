@@ -3,21 +3,16 @@
 
 
 {% block content %}
-<h2>تسجيل الدخول</h2>
+
+
 <div class="root_forms">
+    <p class="form_label">تسجيل الدخول</p>
     <form method="POST" autocomplete="off">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="تسجيل" class="submit">
     </form>
-    <sub><a href="{% url 'signup' %}">إنشاء حساب جديد</a></sub>
-    <br>
-    <sub><a href="{% url 'reset_password' %}"> نسيت كلمة السر </a></sub>
+    <p><a href="{% url 'signup' %}">إنشاء حساب جديد</a></p>
+    <p><a href="{% url 'reset_password' %}"> نسيت كلمة السر </a></p>
 </div>
-<style>
-    .root_forms {
-        margin-top: 120px;
-    }
-  
-</style>
 {% endblock %}

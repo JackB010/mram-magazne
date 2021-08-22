@@ -65,10 +65,11 @@ class Article(models.Model):
         get_user_model(), related_name='saved', blank=True)
     total_likes_f = models.IntegerField(default=0)
 
+    def get_absolute_url(self):
+	    return reverse('post', args=[ self.id, self.status])
     @ property
     def total_likes(self):
         return self.likes.count()
-
     def save(self, *args, **kwargs):
         slug = slugify(self.title)
         has_slug = Article.objects.filter(slug=slug).exists()

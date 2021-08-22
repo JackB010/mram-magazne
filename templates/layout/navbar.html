@@ -1,29 +1,67 @@
 {% load static %}
 <nav>
-    <div>
-        {% block search %}
-        <form action="{% url 'search' %}" method="GET" class='search_form'>
-            <label>
-                <input name="q" type="search"  aria-label="Search">
-                <button type="submit"><i class="fa fa-search fa-1x" aria-hidden="true"></i></button>
-            </label>
-        </form>
-        {% endblock %}
+    <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="img_nav">
+        <a href="{% url  'profile' request.user.profile.id %}"> <img src="{{ request.user.profile.photo.url }}" /> </a>
 
-            <ul>
-                <li><a href="{% url  'posts' %}" id="home" ><img src="{% static 'imgs/brand.jpg' %}"></a></li>
-                <li><a href="{% url 'top_tags' %}">أفضل المواضيع</a></li>
-                <li><a href="{% url 'top_posts' %}">أفضل المقالات</a></li>
-                {% if request.user.is_authenticated %}
-                <li><a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a></li>
-                {% if request.user.profile.super_profile %}
-                <li><a href="{% url 'create_post' %}">إنشاء مقال</a></li>
-                {% endif %}
-                <li><a href="{% url  'logout' %}">تسجيل الخروج</a></li>
-                {% else %}
-                <li><a href="{% url  'login' %}">تسجيل الدخول</a></li>
-                {% endif %}
-            </ul>
+        <p><a href="{% url 'settings' %}" class="settings "> <i class=" fa fa-cog fa-lg" aria-hidden="true"></i></a></p>
     </div>
 
+
+    {% endif %}
+    {% block search %}
+    <form action="{% url 'search' %}" method="GET" class='search_form'>
+        <input name="q" type="search" placeholder="بحث ..." aria-label="Search">
+
+    </form>
+
+    </p>
+    {% endblock %}
+
+    <ul class="links">
+        <li>
+            <p><a href="{% url  'posts' %}" id="home"><img src="{% static 'imgs/brand.jpg' %}"></a></p>
+        </li>
+        <li><a href="{% url 'top_posts' %}">أفضل المقالات</a></li>
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a></li>
+
+        {% if request.user.profile.super_profile %}
+        <li><a href="{% url 'create_post' %}">إنشاء مقال</a></li>
+        {% endif %}
+        <li><a href="{% url  'logout' %}">تسجيل الخروج</a></li>
+        {% else %}
+        <li><a href="{% url  'login' %}">تسجيل الدخول</a></li>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <ul>
+            <a href="{% url 'settings' %}" class="settings_full"> <i class=" fa fa-cog fa-lg"
+                    aria-hidden="true"></i></a>
+        </ul>
+        {% endif %}
+    </ul>
 </nav>
+{% if not user.is_authenticated %}
+<style>
+    @media (max-width: 860px) {
+        nav form {
+            transform: translate(2%, -4px);
+        }
+
+        nav form input[type="search"] {
+            width: 38%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        nav form input[type="search"] {
+            width: 50%;
+        }
+    }
+</style>
+{% endif %}

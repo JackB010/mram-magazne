@@ -4,12 +4,12 @@ except ImportError:
     import json
 
 from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_protect
 from django.http import Http404, HttpResponse
 from .models import Article, Tag, Comment
@@ -42,21 +42,10 @@ def create_post(request):
     }
     return render(request, 'articles/create.html', context)
 
-
-def top_tags(request):
-    items = {i.id: i.count_tag for i in Tag.objects.all()}
-    items = sorted(items.items(), key=lambda x: x[1], reverse=True)[:10]
-    items = [i[0] for i in items]
-    tags = [Tag.objects.get(id=i) for i in items]
-
-    return render(request, 'articles/top_tags.html', {'tags': tags})
-
-
 def top_posts(request):
     posts = Article.objects.filter(Q(status='PUB') & Q(
         active=True)).order_by('-total_likes_f')[:10]
     return render(request, 'articles/posts.html', {'posts': posts})
-
 
 def post_by_tag(request, tag=None):
     tag = get_object_or_404(Tag, tag=tag)
@@ -64,12 +53,15 @@ def post_by_tag(request, tag=None):
         Q(tags=tag) & Q(status='PUB') & Q(active=True)).order_by('-created')
     return render(request, 'articles/posts.html', {'posts': posts, 'tag': tag})
 
+class PostsList(ListView):
+    template_name = 'articles/posts.html'
+    context_object_name = 'posts'
+    ordering = ['-created']
+    paginate_by = 2
 
-def posts_list(request):
-    posts = Article.objects.filter(
-        Q(status='PUB') & Q(active=True)).order_by('-created')
-    return render(request, 'articles/posts.html', {'posts': posts})
-
+    def get_queryset(self):
+        return Article.objects.filter(
+            Q(status='PUB') & Q(active=True))
 
 def post(request, id=None, status=None):
     post = get_object_or_404(Article, Q(status=status)
@@ -77,13 +69,12 @@ def post(request, id=None, status=None):
     comments = post.comments.filter(active=True).order_by('-created')
     form = CommentForm(request.POST or None)
     related_posts = Article.objects.filter(Q(tags__in=post.tags.all()) & Q(status='PUB')
-                                           & Q(active=True)).exclude(id=post.id).order_by('?')[:8]
+                                           & Q(active=True)).exclude(id=post.id).order_by('?')[:12]
 
     return render(request, 'articles/post.html', {'post': post,
                                                   'form': form,
                                                   'comments': comments,
                                                   'related_posts': set(related_posts)})
-
 
 @login_required
 def update_post(request, id=None, status=None):
@@ -103,7 +94,6 @@ def update_post(request, id=None, status=None):
 
     return render(request, 'articles/update.html', {'form': form,   'post': post})
 
-
 def search(request):
     query = request.GET.get('q')
 
@@ -119,6 +109,17 @@ def search(request):
     return render(request, 'articles/posts.html', {'posts': set(posts), 'query': query})
 #########  api  ###############
 
+
+
+def top_tags_api(request):
+    if request.method == 'GET':
+        items = {i.id: i.count_tag for i in Tag.objects.all()} # each id face number of using
+        items = sorted(items.items(), key=lambda x: x[1], reverse=True)[:12]
+        items = [i[0] for i in items]
+        
+        tags = [Tag.objects.get(id=i).tag for i in items]
+        
+    return HttpResponse(json.dumps({'tags': tags}), content_type='application/json')
 
 @ login_required
 @ require_POST
@@ -140,7 +141,6 @@ def like_api(request, id=None):
 
     return HttpResponse(ctx, content_type='application/json')
 
-
 @ login_required
 def is_liked_api(request):
     if request.method == 'GET':
@@ -149,7 +149,6 @@ def is_liked_api(request):
         obj = get_object_or_404(Article, id=id)
         user_liked = user in obj.likes.all()
     return HttpResponse(json.dumps({'user_liked': user_liked}), content_type='application/json')
-
 
 @ login_required
 @ require_POST
@@ -167,7 +166,6 @@ def delete_comment_api(request):
             num = comment.article.comments.filter(active=True).count()
         return HttpResponse(json.dumps({'comments_count': num}), content_type='application/json')
 
-
 @ login_required
 @ require_POST
 def comment_api(request):
@@ -182,7 +180,6 @@ def comment_api(request):
         obj = Comment.objects.create(article=obj, user=user, comment=comment)
 
         return HttpResponse(json.dumps({'comment': obj.comment, 'id': str(obj.id), 'comments_count': num}), content_type='application/json')
-
 
 @ login_required
 @ require_POST
@@ -199,42 +196,40 @@ def save_api(request):
         is_post_saved = user in obj.saved.all()
     return HttpResponse(json.dumps({'is_post_saved': is_post_saved}), content_type='application/json')
 
-
 @ login_required
 def is_saved_api(request):
     if request.method == 'GET':
         user = request.user
         id = request.GET.get('id')
+        
         if id != '':
             post = Article.objects.get(id=id)
             items = user in post.saved.all()
         else:
-            posts = Article.objects.filter(
-                Q(status='PUB') & Q(active=True)).order_by('-created')
-
+            top = request.GET.get('top')
+            tag = request.GET.get('tag')
+            status = request.GET.get('status')
             profile_id = request.GET.get('profile_id')
+            posts = Article.objects.filter(Q(status=status if status else 'PUB') & Q(active=True)).order_by('-created')
             ###################
             if profile_id:
                 profile = get_user_model().objects.filter(profile__id=profile_id).first()
                 posts = profile.creater.filter(
                     Q(status='PUB') & Q(active=True)).order_by('-created')
-            top = request.GET.get('top')
             if top:
                 posts = Article.objects.filter(Q(status='PUB') & Q(
                     active=True)).order_by('-total_likes_f')[:10]
-            tag = request.GET.get('tag')
-            if tag != '':
+            if tag :
                 tag = Tag.objects.get(tag=tag)
                 posts = posts.filter(tags=tag)
             items = [user in post.saved.all() for post in posts]
             query = request.GET.get('query')
-            if query != '':
+            if query :
                 posts = posts.filter(Q(tags__tag__icontains=query) |
                                      Q(title__icontains=query) |
                                      Q(user__username=query))
                 items = [user in post.saved.all() for post in set(posts)]
     return HttpResponse(json.dumps({'items': items}), content_type='application/json')
-
 
 @ login_required
 @ require_POST
@@ -247,7 +242,6 @@ def delete_post_api(request):
             obj.active = False
             obj.save()
     return HttpResponse(json.dumps({}), content_type='application/json')
-
 
 @ login_required
 @ require_POST
@@ -263,7 +257,6 @@ def super_profile_api(request):
 
     return HttpResponse(json.dumps({'is_super_profile': obj.profile.super_profile}), content_type='application/json')
 
-
 @ login_required
 def is_super_profile_api(request):
     if request.method == 'GET':
@@ -271,3 +264,6 @@ def is_super_profile_api(request):
         obj = get_user_model().objects.get(profile__id=id)
         x = obj.profile.super_profile
     return HttpResponse(json.dumps({'is_super_profile': x}), content_type='application/json')
+
+
+

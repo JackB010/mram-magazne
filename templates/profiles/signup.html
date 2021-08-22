@@ -3,20 +3,14 @@
 
 
 {% block content %}
-<h2>إنشاء حساب</h2>
 <div class="root_forms">
+    <p class="form_label">إنشاء حساب</p>
     <form method="POST" enctype="multipart/form-data">
-
         {% csrf_token %}
         {{ form.as_p }}
-
         <input type="submit" value="إنشاء" class="submit">
     </form>
     <a href="{% url 'login' %}">بالفعل لدي حساب !</a>
 </div>
-<style>
-    .root_forms {
-        margin-top: 120px;
-    }
-</style>
+
 {% endblock %}

@@ -1,4 +1,77 @@
 <footer class="nav-footer">
+    <div id="footer_top">
+        <p>أفضل المواضيع </p>
+        <div>
+            <div class="top_tags">
+            </div>
+        </div>
+    </div>
+    <div id="et-footer-nav">
+        <div>
+            <ul id="menu-info-menu" class="bottom-nav">
+                <li><a href="{% url 'posts' %}">الصفحة الرئسية</a></li>
+                <li>
 
-    <div><i class="fa fa-instagram" aria-hidden="true"></i> </div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a>
+                    {% endif %}
+
+                </li>
+                <li><a href="#">حول</a></li>
+                <li><a href="#">تواصل معنا</a></li>
+                <li><a href="#">السياسات</a></li>
+                <br>
+                <li>
+                    <p>جميع الحقوق محفوظة © موضوع </p>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div id="footer-bottom">
+        <div>
+            <ul>
+                <li>
+                    <a href="https://www.facebook.com/Jackbill" class="icon">
+                        <i class="fa fa-facebook-square fa-2x"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.facebook.com/Jackbill" class="icon">
+                        <i class="fa fa-twitter-square fa-2x"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href=" https://twitter.com/Jackbill" class="icon">
+                        <i class="fa fa-instagram fa-2x insta"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'post_feed' %}" class="icon">
+                        <i class="fa fa-rss-square fa-2x " style="color:#ff922b"></i>
+                    </a>
+                </li>
+            </ul>
+            <div id="footer-info">By <i class="fa fa-heart " style="color: red;"></i>JB</div>
+        </div>
+    </div>
 </footer>
+<script>
+    $.ajax({
+        type: "GET",
+        url: "{% url 'top_tags_api' %}",
+        data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        dataType: "json",
+        success: (e) => {
+            item = $('.top_tags')
+            e.tags.forEach((i) => {
+                item.append(
+                    `<div class='top_tag'"> <a href="/ar/posts/tag/${i}/" rel="tag">${i}</a></div>`
+                )
+
+            })
+        },
+    });
+</script>

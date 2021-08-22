@@ -2,23 +2,22 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.utils.translation import gettext, gettext_lazy as _
-# from django_countries.data import COUNTRIES
+from django_countries.data import COUNTRIES
 from django_countries.widgets import CountrySelectWidget
 from django.contrib.auth import get_user_model
+# from django.forms import ModelChoiceField
 from .models import Profile
 
 
 class ProfileForm(forms.ModelForm):
-    # country = forms.CharField(label='البلد', required=False,  widget=forms.TextInput(attrs={
-    #     'placeholder': 'البلد'
-    # }))
+    # country = forms.CharField(label='', required=False, widget=CountrySelectWidget({}))
 
-    bio = forms.CharField(label='المواصفات الشخصية', required=False, widget=forms.Textarea(attrs={
+    bio = forms.CharField(label='', required=False, widget=forms.Textarea(attrs={
         'placeholder': 'المواصفات الشخصية', 'class': 'forms',
         "cols": 10,
         "rows": 2,
     }))
-    website = forms.CharField(label='موقع إلكتوني', required=False,  widget=forms.TextInput(attrs={
+    website = forms.CharField(label='', required=False,  widget=forms.TextInput(attrs={
         'placeholder': 'موقع إلكتوني', 'class': 'forms'
     }))
 
@@ -29,13 +28,13 @@ class ProfileForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
-    username = forms.CharField(label='اسم المستخدم', widget=forms.TextInput(
+    username = forms.CharField(label='', widget=forms.TextInput(
         attrs={"placeholder": 'اسم المستخدم', 'class': 'forms'}))
-    email = forms.EmailField(label='عنوان بريد إلكتروني', widget=forms.EmailInput(
+    email = forms.EmailField(label='', widget=forms.EmailInput(
         attrs={"placeholder": 'عنوان بريد إلكتروني', 'class': 'forms'}))
-    first_name = forms.CharField(label='الاسم الأول', widget=forms.TextInput(
+    first_name = forms.CharField(label='', widget=forms.TextInput(
         attrs={"placeholder": 'الاسم الأول', 'class': 'forms'}), required=False)
-    last_name = forms.CharField(label='الاسم الأخير', widget=forms.TextInput(
+    last_name = forms.CharField(label='', widget=forms.TextInput(
         attrs={"placeholder": 'الاسم الأخير', 'class': 'forms'}), required=False)
 
     class Meta:

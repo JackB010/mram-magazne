@@ -11,19 +11,22 @@ from .views import (signup,
                     saved_posts,
                     reset_password,
                     confirm_code_reset,
-                    change_password_reset
+                    change_password_reset,
+                    settings_view
                     )
 urlpatterns = [
     path('signup/', signup, name='signup'),
     path('login/', login_view, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='profiles/logout.html'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(template_name=None), name='logout'),
 
     path('update/user/', update_info_user, name='update_info_user'),
     path('update/profile/', update_info_profile, name='update_info_profile'),
 
     path('<uuid:id>/', profile_view, name='profile'),
     path('<uuid:id>/draft/', draft_profile_posts, name='draft_posts'),
-    path('saved', saved_posts, name='saved'),
+    path('saved/', saved_posts, name='saved'),
+    path('settings/', settings_view, name='settings'),
+    
     # path('<uuid:id>/draft/<slug:slug>/', draft_post, name='draft_post'),
 
     path('change_password/', ChangeUserPasswordView.as_view(

@@ -1,114 +1,105 @@
 {% extends "base.html" %} {% load static %} {% block title %} {{ post.title }}
 {% endblock %} {% block content %}
 <article>
+
   <div>
     <p id="title">{{ post.title|title }}</p>
     <p id="sub_title">{{ post.sub_title }}</p>
     <div id="post_body">{{ post.body|safe }}</div>
+
     <div id="post_info">
-      <div class="post_user_info">
-        <a href="{% url 'profile' post.user.profile.id %}"><img src="{{ post.user.profile.photo.url }}" /></a>
-        <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
-      </div>
-
-      <sub><i class="fa fa-calendar" aria-hidden="true" style="margin: 2px;"></i>
-        {{ post.created | date:"l d F Y , H:i" }}</sub>
-      <br>
-      {% if post.created != post.updated %}
-      <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 2px;"></i>
-        {{ post.updated | date:"l d F Y , H:i"}}</sub>
-
-      {% endif %}
-      <hr style="width: 60%; margin: 0 auto ; color: #eaeaea; margin-bottom: 30px ;margin-top: 30px;" />
+      <footer class="post_user_info" style="border: none; margin-top: 20px;">
+        {% if user.is_authenticated %}
+        <div class="save_like">
+          <div id="count_likes"> {{ post.total_likes }} إعجاب | {{ comments.count }} تعليق </div>
+          <div>
+            <i class="fa fa-heart fa-2x like" id="like" aria-hidden="true" style="color: rgb(86, 12, 121);"></i>
+          </div>
+          <div>
+            <i class="fa fa-bookmark fa-2x save" id="{{ post.id }}" aria-hidden="true"></i>
+          </div>
+          {% if post.user == user %}
+          <div>
+            <i class="fa fa-trash-o fa-2x delete" aria-hidden="true" id="delete_post" style=" color: #ff0000;"></i>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+        <div class="article_info">
+          <a href="{% url 'profile' post.user.profile.id %}"><img src="{{ post.user.profile.photo.url }}" /></a>
+          <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
+          <div style="margin-top: 20px;">
+            <sub><i class="fa fa-calendar" aria-hidden="true" style="margin: 2px;"></i>
+              {{ post.created | date:"l d F Y , H:i" }}</sub>
+          </div>
+        </div>
+      </footer>
     </div>
-
-    <div class='tag'>
+    {% if user.is_authenticated %}
+    <div class="ask_for_delete">
+      <div class="text_help">are you sure you wanna delete this post</div>
+      <button id="delete" class="submit">delete</button>
+      <button id="cansole" class="submit">console</button>
+    </div>
+    {% endif %}
+    <h2> Tags </h2>
+    <div class='tags'>
       {% for tag in post.tags.all %}
-      <a href="{% url 'tags' tag %}">
-        <p>{{ tag }} </p>
-      </a>
+      <div class="tag">
+        <a href="{% url 'tags' tag %}" rel="tag">
+          {{ tag }}
+        </a>
+      </div>
       {% endfor %}
+
     </div>
 </article>
 
-<div id="count_likes">{{ post.total_likes }}<b> إعجاب</b> | {{ comments.count }}<b> تعليق</b>  </div>
-<!-- likes & creat_comments -->
-{% if user.is_authenticated %}
-<div class="save_like">
-
-  <div>
-    <i class="fa fa-heart fa-2x like" id="like" aria-hidden="true"></i>
-  </div>
-  <div>
-    <i class="fa fa-bookmark fa-2x save" id="{{ post.id }}" aria-hidden="true"></i>
-  </div>
-  {% if post.user == user %}
-  <div><button id="delete_post" class="submit"><i class="fa fa-trash-o fa-lg"></i>حذف</button></div>
-  {% endif %}
-</div>
-<div class="ask_for_delete">
-  <div class="text_help">are you sure you wanna delete this post</div>
-  <button id="delete" class="submit">delete</button>
-  <button id="cansole" class="submit">console</button>
-</div>
-{% endif %}
 
 <div class="related_posts">
+  <h2>مواضيع ذات صلة </h2>
+
   {% for post in related_posts %}
   <div class="related_post">
-    <div class="post_user_info">
-      <div><a href="{% url 'post' post.id post.status %}"><img src="{{ post.picture.url }}"
-            class='related_picture' /></a></div>
-      <div><a href="{% url 'post' post.id post.status %}">{{ post.title }}</a></div>
-    </div>
-    <div class="post_user_info user">
-      <img src="{{ post.user.profile.photo.url }}" />
-      <a href="{% url 'profile' post.user.profile.id %}">{{ post.user }}</a>
-    </div>
-    <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 2px;"></i>
-      {{ post.created | date:"l d F Y , H:i"}}</sub>
+
+    <a href="{% url 'post' post.id post.status %}"><img src="{{ post.picture.url }}" class='related_picture' />
+      <span>{{ post.title }}</span>
+    </a>
   </div>
   {% endfor %}
 </div>
+
 {% if request.user.is_authenticated %}
-
-
-
 <div class="root_forms">
   <form method="POST" id="creat_comment" autocomplete="off">
     {{ form.as_p }} {% csrf_token %}
     <button type="submit" class="submit"><i class="fa fa-commenting-o" aria-hidden="true"></i> تعليق </button>
   </form>
 </div>
-
 {% endif %}
 
 <!-- comment_list -->
 
 <fieldset>
-  <legend>comments</legend>
-<div class="comment_items">
-  <div class="new_comment"></div>
-  {% for comment in comments %}
-  <div class="comment_item">
-    {% if comment.user == user %}
-    <i class="fa fa-trash fa-lg delete_comment" onclick="delete_comment()" id="{{ comment.id }}"></i>
-    {% endif %}
-    <div class="post_user_info">
-      <img src="{{ comment.user.profile.photo.url }}" />
-      <a href="{% url 'profile' comment.user.profile.id %}">{{ comment.user }}</a>
+  <legend class="form_label"> التعليقات </legend>
+  <div class="comment_items">
+    <div class="new_comment"></div>
+    {% for comment in comments %}
+    <div class="comment_item">
+      {% if comment.user == user %}
+      <i class="fa fa-trash fa-lg delete_comment" onclick="delete_comment()" id="{{ comment.id }}"></i>
+      {% endif %}
+      <div class="post_user_info">
+        <img src="{{ comment.user.profile.photo.url }}" />
+        <a href="{% url 'profile' comment.user.profile.id %}">{{ comment.user }}</a>
+      </div>
+      <p class="comment">{{ comment.comment }}</p>
+      <sub> <i class="fa fa-calendar" aria-hidden="true"
+          style="margin: 2px;"></i>{{ comment.created | date:"l d F Y , H:i" }}</sub>
     </div>
-    <p class="comment">{{ comment.comment }}</p>
-    <sub> <i class="fa fa-calendar" aria-hidden="true"
-        style="margin: 2px;"></i>{{ comment.created | date:"l d F Y , H:i" }}</sub>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
 </fieldset>
-
-
-
-
 
 {% if user.is_authenticated %}
 <script>
@@ -126,8 +117,10 @@
         csrfmiddlewaretoken: "{{ csrf_token }}",
       },
       dataType: "json",
-      success: (e) => {par.fadeOut(400, () => par.remove())
-      $("#count_likes").html(`{{post.total_likes}} <b> إعجاب</b> | ${ e.comments_count }<b> تعليق</b> `);},
+      success: (e) => {
+        par.fadeOut(400, () => par.remove())
+        $("#count_likes").html(`{{post.total_likes}}  إعجاب | ${ e.comments_count } تعليق `);
+      },
     });
   };
   $("#like").click(() => {
@@ -139,7 +132,7 @@
       },
       dataType: "json",
       success: (e) => {
-        $("#count_likes").html(`${e.likes_count} <b> إعجاب</b> | ${ e.comments_count }<b> تعليق</b> `);
+        $("#count_likes").html(`${e.likes_count} إعجاب | ${ e.comments_count } تعليق `);
         $('#like').toggleClass('fa-heart-o')
       },
     });
@@ -156,8 +149,8 @@
       },
       dataType: "json",
       success: (e) => {
-        $("#count_likes").html(`{{post.total_likes}} <b> إعجاب</b> | ${ e.comments_count }<b> تعليق</b> `);
-        $(".comment_items").append(
+        $("#count_likes").html(`{{post.total_likes}} إعجاب | ${ e.comments_count } تعليق `);
+        $(".comment_items").prepend(
           `<div class="comment_item">      
                 <i class="fa fa-trash  fa-lg delete_comment" onclick="delete_comment()" id=${e.id}></i>
                 <div class="post_user_info">
@@ -183,7 +176,6 @@
       },
     });
   });
-
   $.ajax({
     type: "GET",
     url: "{% url 'is_saved_api' %}",
@@ -206,7 +198,6 @@
         $("#like").addClass('fa-heart-o')
     },
   });
-
   $("#delete_post").click(() => {
     const e = document.querySelector(".ask_for_delete");
     e.classList.add("open");

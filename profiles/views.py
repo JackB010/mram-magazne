@@ -25,7 +25,12 @@ def get_user_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-
+@ login_required
+def settings_view(request):
+    if request.user.id is None:
+        return redirect('posts')
+    return render(request, 'layout/settings.html')
+    
 def login_view(request):
     if request.user.id is not None:
         return redirect('posts')
@@ -38,6 +43,7 @@ def login_view(request):
             user = User.objects.filter(Q(username=email_or_username)
                                        | Q(email=email_or_username)).first()
             password = form.cleaned_data['password']
+            
             if user != None and user.check_password(password):
                 user = authenticate(username=user.username, password=password)
                 login(request, user)
@@ -49,7 +55,6 @@ def login_view(request):
             else:
                 form = LoginForm()
     return render(request, 'profiles/login.html', {'form': form})
-
 
 def signup(request):
     if request.user.id is not None:
@@ -69,7 +74,6 @@ def signup(request):
                 request, f'   لقد تم انشاء حسابك بنجاح, {username}  مرحباٌ')
             return redirect('posts')
     return render(request, 'profiles/signup.html', {'form': form})
-
 
 def reset_password(request):
     form = ResetPasswordForm(request.POST or None)
@@ -99,7 +103,6 @@ def reset_password(request):
                 return redirect('sended_reset_code')
     return render(request, 'profiles/reset_password.html', {'form': form})
 
-
 def confirm_code_reset(request, id=None):
     obj = get_object_or_404(ResetPassword, id=id)
     now = datetime.datetime.now()
@@ -121,7 +124,6 @@ def confirm_code_reset(request, id=None):
                 messages.warning(request, 'رقم التأكيد خاطأ')
                 form = CheckCodeForm()
     return render(request, 'profiles/confirm_code_reset.html', {'form': form})
-
 
 def change_password_reset(request, code=None):
     code = int(code, 16)
@@ -146,7 +148,6 @@ def change_password_reset(request, code=None):
 
     return render(request, 'profiles/change_password_reset.html', {'form': form})
 
-
 @ login_required
 def update_info_user(request):
     if request.user.id is None:
@@ -158,7 +159,6 @@ def update_info_user(request):
             form.save()
             return redirect('profile', id=request.user.profile.id)
     return render(request, 'profiles/update_user.html', {'form': form})
-
 
 @ login_required
 def update_info_profile(request):
@@ -175,7 +175,6 @@ def update_info_profile(request):
             return redirect('profile', id=request.user.profile.id)
     return render(request, 'profiles/update_profile.html', {'form': form})
 
-
 def profile_view(request, id=None):
     if id is None:
         user = request.user
@@ -189,14 +188,12 @@ def profile_view(request, id=None):
                                                      'posts': posts,
                                                      })
 
-
 @ login_required
 def saved_posts(request):
     if request.user.id is None:
         return redirect('posts')
     user = request.user
     return render(request, 'profiles/saved.html', {'posts': user.saved.all().order_by('-created')})
-
 
 @ login_required
 def draft_profile_posts(request, id=None):
@@ -209,4 +206,7 @@ def draft_profile_posts(request, id=None):
         Q(status='DRA') & Q(active=True)).order_by('-created')
     return render(request, 'articles/posts.html', {
         'posts': posts,
+        'status': 'DRA',
     })
+
+

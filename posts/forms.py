@@ -9,6 +9,7 @@ class ArticleForm(forms.ModelForm):
         attrs={'placeholder': 'العنوان الفرعي', 'cols': 40, 'rows': 5, 'class': 'forms'}))
     # body = forms.CharField(label='', widget=forms.Textarea(
     #     attrs={'placeholder': 'المقال', 'class': 'forms'}))
+    
 
     class Meta:
         model = Article

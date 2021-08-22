@@ -1,36 +1,15 @@
 {% extends "base.html" %} {% load static %}
-{% block title %} {{ user.username }} {% endblock %}
+{% block title %} {{ user.username }} - الصفحة الشخصية{% endblock %}
 {% block content %}
 
 
-
-
+<div style="padding: 20px;"></div>
 <div class="profile">
-  <div class="help_text"></div>
-  {% if not request.user.is_authenticated or not request.user.profile.super_profile %}
-  <div style="padding-top: 80px;"></div>
-  {% endif %}
   {% if request.user.profile.super_profile %}
   <div>
     <div id="make_super">
       <div></div>
     </div>
-  </div>
-  <div class="settings">
-    <div><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;settings <span class="fa fa-caret-down"
-        title="Toggle dropdown menu"></span></div>
-
-
-    <ul class="dropdown-menu">
-      <li> <a href="{% url 'update_info_profile' %}">edit profile</a></li>
-      <li> <a href="{% url 'update_info_user' %}">edit user</a></li>
-      <li><a href="{% url 'change_password' %}"> change password</a></li>
-      {% if profile.website %}
-      <li><a href="{{ profile.website }}"> webite</a></li>
-      {% endif %}
-      <li class="divider"></li>
-      <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
-    </ul>
   </div>
   {% endif %}
 
@@ -38,22 +17,18 @@
     <img id="clip1" src=" {{ profile.photo.url }} " alt="img of {{ user.username }}" />
   </div>
 
-  <h4>{{ user.username }}</h4>
   <p>{{ user.first_name }} {{ user.last_name }}</p>
   <p><a href="mailto:{{ user.email }}">
       {{ user.email }}
     </a></p>
   <p>{{ profile.bio }}</p>
-
-  <ul style="list-style:none ; ">
-    <li style="margin-left: 10%;">
-      <i class="flag2x {{ profile.country.flag_css }}"></i>
-      {{ profile.country.name }}</li>
-  </ul>
-
+  <br>
+  {% if profile.website %}
+  <li><a href="{{ profile.website }}"> webite</a></li>
+  {% endif %}
 </div>
 
-
+<h2>{{ user.username }}</h2>
 <div style="margin: 20px auto; border-top: 2px solid rgba(0, 0, 0, 0.9); width:60%;">
 </div>
 
@@ -66,7 +41,6 @@
   {% if posts %}
   {% for  post in posts %}
   <article class="articles">
-
     {% if post.picture %}
     <a href="{% url 'post' post.id  post.status %}">
       <img class='post_img' src="{{ post.picture.url }}">
@@ -77,16 +51,14 @@
       aria-hidden="true"></i>
     {% if request.user == user %}
     <span class="edit_span">
-      <input value="..." type="button" />
+      <button>...</button>
       <div class="edit_list">
         <ul>
-          <li><a href="{% url 'update_post' post.id post.status %}">update</a></li>
-          <li><a href="#">delete</a></li>
+          <li><a href="{% url 'update_post' post.id post.status %}">تعديل</a></li>
+          <li><a href="#">حذف</a></li>
         </ul>
       </div>
     </span>
-
-
     {% endif %}
     {% endif %}
     <div class='post'>
@@ -94,7 +66,6 @@
         <h2>{{ post.title }}</h2>
       </a>
       <footer class="post_user_info" style=" margin: 12px auto;">
-
       </footer>
       <div style="margin-right: 5px; margin-bottom: 12px;">
         <sub> <i class="fa fa-calendar" aria-hidden="true" style="margin: 4px; "></i>
@@ -107,7 +78,6 @@
   <h2>Nothing To Show</h2>
   {% endif %}
 </section>
-
 
 
 {% if user.is_authenticated %}
@@ -125,16 +95,16 @@
       $("#make_super").css({
         background: "#fafafa",
       });
-      $(".help_text").html("Super Account");
+
     } else {
       $("#make_super div").css({
         float: "left",
         background: "rgb(240, 20, 20)",
       });
       $("#make_super").css({
-        background: "#453435",
+        background: "#ffffff",
       });
-      $(".help_text").html("Normal Account");
+
     }
   };
   $("#make_super").click(() => {
@@ -157,7 +127,6 @@
       add_style(e.is_super_profile);
     },
   });
-
   $('.save').click((e) => {
     item = e.target
     $.ajax({
@@ -197,5 +166,6 @@
   });
 </script>
 {% endif %}
+
 
 {% endblock %}
