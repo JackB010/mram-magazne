@@ -1,7 +1,7 @@
 import os, django_heroku, dj_database_url
 
 DEBUG = False
-ALLOWED_HOSTS = ["*",".heroku.com" ,".com"]
+ALLOWED_HOSTS = ["*","marammagazine.herokuapp.com",".heroku.com" ,".com"]
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yd2by@)m(j_dxcyxq!@w1^o5hcx1w#dkoky#&ci(&-mj$_=vh#'
