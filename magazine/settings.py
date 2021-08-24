@@ -8,7 +8,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yd2by@)m(j_dxcyxq!@w1^o5hcx1w#dkoky#&ci(&-mj$_=vh#'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = True
+SESSION_COOKIE_SECURE = True
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
