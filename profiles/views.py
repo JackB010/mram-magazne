@@ -72,10 +72,12 @@ def signup(request):
             login(request, user.user)
             messages.success(
                 request, f'   لقد تم انشاء حسابك بنجاح, {username}  مرحباٌ')
-            return redirect('posts')
+            return redirect('update_info_profile')
     return render(request, 'profiles/signup.html', {'form': form})
 
 def reset_password(request):
+    if request.user.id is not None:
+        return redirect('posts')
     form = ResetPasswordForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -104,6 +106,8 @@ def reset_password(request):
     return render(request, 'profiles/reset_password.html', {'form': form})
 
 def confirm_code_reset(request, id=None):
+    if request.user.id is not None:
+        return redirect('posts')
     obj = get_object_or_404(ResetPassword, id=id)
     now = datetime.datetime.now()
     if abs(now.hour - obj.created.hour) > 1 and (abs(now.day - obj.created.day) >= 0 or (now.month - obj.created.month) >= 0 or (now.year - obj.created.year) >= 0):
@@ -126,6 +130,8 @@ def confirm_code_reset(request, id=None):
     return render(request, 'profiles/confirm_code_reset.html', {'form': form})
 
 def change_password_reset(request, code=None):
+    if request.user.id is not None:
+        return redirect('posts')
     code = int(code, 16)
     obj = get_object_or_404(ResetPassword, code=code)
     user = User.objects.get(Q(username=obj.username)

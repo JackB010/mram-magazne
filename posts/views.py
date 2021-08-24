@@ -16,7 +16,12 @@ from .models import Article, Tag, Comment
 from .forms import ArticleForm, TagForm, CommentForm
 import random
 
-
+# static 
+def about_us(request):
+    return render(request, 'layout/about_us.html')
+def policy(request):
+    return render(request, 'layout/policy.html')
+#########################
 @login_required
 def create_post(request):
     if (not request.user.profile.super_profile):
@@ -57,7 +62,7 @@ class PostsList(ListView):
     template_name = 'articles/posts.html'
     context_object_name = 'posts'
     ordering = ['-created']
-    paginate_by = 2
+    paginate_by = 24
 
     def get_queryset(self):
         return Article.objects.filter(

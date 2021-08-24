@@ -33,7 +33,12 @@
                 </ul>
             </div>
         </span>
+        {% else %}
+        {% if post.title|length < 50 %}
+        <div style="margin-top: 22px;"></div>
         {% endif %}
+        {% endif %}
+
         {% endif %}
         <div class='post'>
             <a href="{% url 'post' post.id  post.status %}" style="text-decoration: none">

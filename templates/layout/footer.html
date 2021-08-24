@@ -11,20 +11,17 @@
             <ul id="menu-info-menu" class="bottom-nav">
                 <li><a href="{% url 'posts' %}">الصفحة الرئسية</a></li>
                 <li>
-
                     {% if user.is_authenticated %}
                     <a href="{% url  'profile' request.user.profile.id %}">الصفحة الشخصية</a>
                     {% endif %}
-
                 </li>
-                <li><a href="#">حول</a></li>
+                <li><a href="{% url 'about_us' %}">حول</a></li>
                 <li><a href="#">تواصل معنا</a></li>
-                <li><a href="#">السياسات</a></li>
+                <li><a href="{% url 'policy' %}"> سياسة الخصوصية</a></li>
                 <br>
                 <li>
-                    <p>جميع الحقوق محفوظة © موضوع </p>
+                    <p>جميع الحقوق محفوظة مرام {% now "Y" %} &copy;</p>
                 </li>
-
             </ul>
         </div>
     </div>
@@ -68,7 +65,7 @@
             item = $('.top_tags')
             e.tags.forEach((i) => {
                 item.append(
-                    `<div class='top_tag'"> <a href="/ar/posts/tag/${i}/" rel="tag">${i}</a></div>`
+                    `<div class='top_tag'"> <a href="/posts/tag/${i}/" rel="tag">${i}</a></div>`
                 )
 
             })

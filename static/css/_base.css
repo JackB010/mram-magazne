@@ -642,12 +642,18 @@ nav form {
   display: inline;
   margin: 12px;
 }
+.logout p {
+  color: rgb(56, 14, 58);
+}
+.errorlist li {
+  color: red;
+}
 #et-footer-nav {
   grid-column: span 6;
 }
-#et-footer-nav div {
+#et-footer-nav {
   border-top: 4px solid white;
-  width: 200px;
+  width: 216px;
   margin: 30px auto;
 }
 .bottom-nav {
@@ -656,7 +662,6 @@ nav form {
 .bottom-nav li a {
   color: white;
   text-align: right;
-  padding: 30px;
 }
 /* ######################################## */
 .delete_comment {
@@ -928,7 +933,7 @@ footer > p {
     width: 90%;
   }
   .nav-footer {
-    height: 470px;
+    height: 500px;
   }
   #footer_top,
   #et-footer-nav,

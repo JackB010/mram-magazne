@@ -22,15 +22,15 @@ from .views import (PostsList,
 
 
 urlpatterns = [
-    path('', PostsList.as_view(), name='posts'),
-    path('<uuid:id>/<str:status>/', post, name='post'),
-    path('search/', search, name='search'),
-    path('create/', create_post, name='create_post'),
 
-    path('update/<uuid:id>/<str:status>/', update_post, name='update_post'),
-    path('tag/<str:tag>/', post_by_tag, name='tags'),
-    path('top/', top_posts, name='top_posts'),
-    path('feed/', LatestArticlesFeed(), name='post_feed'), 
+     path('', PostsList.as_view(), name='posts'),
+     path('<uuid:id>/<str:status>/', post, name='post'),
+     path('search/', search, name='search'),
+     path('create/', create_post, name='create_post'),
+     path('update/<uuid:id>/<str:status>/', update_post, name='update_post'),
+     path('tag/<str:tag>/', post_by_tag, name='tags'),
+     path('top/', top_posts, name='top_posts'),
+     path('feed/', LatestArticlesFeed(), name='post_feed'), 
 #     path('top/tags/', top_tags, name='top_tags'),
 
 
