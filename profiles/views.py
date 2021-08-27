@@ -101,6 +101,7 @@ def reset_password(request):
                 email = EmailMessage('Code Confirm', template,
                                      'jackbill687@gmail.com', [user.email, ])
                 email.content_subtype = 'html'
+                email.fail_silently=False
                 email.send()
                 return redirect('sended_reset_code')
     return render(request, 'profiles/reset_password.html', {'form': form})

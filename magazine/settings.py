@@ -1,14 +1,10 @@
 import os
-# import django_heroku
-# import dj_database_url
+
 
 DEBUG = True
-# ALLOWED_HOSTS = ["127.0.0.1","marammagazine.herokuapp"]
 ALLOWED_HOSTS = []
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yd2by@)m(j_dxcyxq!@w1^o5hcx1w#dkoky#&ci(&-mj$_=vh#'
-
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,7 +15,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-
     ###  local apps ####
     'posts.apps.PostsConfig',
     'profiles.apps.ProfilesConfig',
@@ -29,18 +24,12 @@ INSTALLED_APPS = [
     'django_countries',
 ]
 SITE_ID = 1
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-# EMAIL_PORT = 465
-# EMAIL_USE_TLS = True
-
+ROOT_URLCONF = 'magazine.urls'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -51,7 +40,6 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
-ROOT_URLCONF = 'magazine.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -67,24 +55,13 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'magazine.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -100,33 +77,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
-
 LANGUAGE_CODE = 'ar-DZ'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-
-# CSRF_COOKIE_SECURE = True
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CKEDITOR_UPLOAD_PATH = 'uploads/'
-
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar_YourCustomToolbarConfig': [
@@ -160,7 +125,7 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
-
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'posts'
 LOGOUT_REDIRECT_URL = 'login'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
