@@ -1,16 +1,15 @@
 import os
-import django_heroku
+# import django_heroku
+# import dj_database_url
 
 DEBUG = True
-ALLOWED_HOSTS = ["marammagazine.herokuapp"]
-
+# ALLOWED_HOSTS = ["127.0.0.1","marammagazine.herokuapp"]
+ALLOWED_HOSTS = []
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yd2by@)m(j_dxcyxq!@w1^o5hcx1w#dkoky#&ci(&-mj$_=vh#'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = True
-SESSION_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,13 +29,18 @@ INSTALLED_APPS = [
     'django_countries',
 ]
 SITE_ID = 1
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+# EMAIL_PORT = 465
+# EMAIL_USE_TLS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -47,10 +51,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
-
 ROOT_URLCONF = 'magazine.urls'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -116,7 +117,7 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 STATIC_URL = '/static/'
