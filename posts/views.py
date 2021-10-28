@@ -49,8 +49,8 @@ def create_post(request):
 
 def top_posts(request):
     posts = Article.objects.filter(Q(status='PUB') & Q(
-        active=True)).order_by('-total_likes_f')[:10]
-    return render(request, 'articles/posts.html', {'posts': posts})
+        active=True)).order_by('-total_likes_f')[:12]
+    return render(request, 'articles/posts.html', {'posts': posts, 'top':True})
 
 def post_by_tag(request, tag=None):
     tag = get_object_or_404(Tag, tag=tag)
@@ -223,7 +223,7 @@ def is_saved_api(request):
                     Q(status='PUB') & Q(active=True)).order_by('-created')
             if top:
                 posts = Article.objects.filter(Q(status='PUB') & Q(
-                    active=True)).order_by('-total_likes_f')[:10]
+                    active=True)).order_by('-total_likes_f')[:12]
             if tag :
                 tag = Tag.objects.get(tag=tag)
                 posts = posts.filter(tags=tag)
@@ -271,4 +271,11 @@ def is_super_profile_api(request):
     return HttpResponse(json.dumps({'is_super_profile': x}), content_type='application/json')
 
 
+# handler
+"""
+def view404(request):
+    return render(request, "httpE/404_template.html")
 
+def view500(request):
+    return render(request, "httpE/500_template.html")
+"""

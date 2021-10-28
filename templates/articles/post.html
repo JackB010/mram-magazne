@@ -38,8 +38,8 @@
     {% if user.is_authenticated %}
     <div class="ask_for_delete">
       <div class="text_help">are you sure you wanna delete this post</div>
-      <button id="delete" class="submit">delete</button>
-      <button id="cansole" class="submit">console</button>
+      <button id="delete" class="submit">حذف</button>
+      <button id="cansole" class="submit">إلغاء</button>
     </div>
     {% endif %}
     <h2> Tags </h2>
@@ -198,16 +198,7 @@
         $("#like").addClass('fa-heart-o')
     },
   });
-  $("#delete_post").click(() => {
-    const e = document.querySelector(".ask_for_delete");
-    e.classList.add("open");
-    $("body").css('pointer-events', 'none');
-  });
-  $("#cansole").click(() => {
-    const e = document.querySelector(".ask_for_delete");
-    e.classList.remove("open");
-    $("body").css('pointer-events', 'all')
-  });
+
   $("#delete").click(() => {
     $.ajax({
       type: "POST",
@@ -226,6 +217,17 @@
         });
       },
     });
+  });
+
+  $("#delete_post").click(() => {
+    const e = document.querySelector(".ask_for_delete");
+    e.classList.add("open");
+    $("body").css('pointer-events', 'none');
+  });
+  $("#cansole").click(() => {
+    const e = document.querySelector(".ask_for_delete");
+    e.classList.remove("open");
+    $("body").css('pointer-events', 'all')
   });
 </script>
 {% endif %} {% endblock %}

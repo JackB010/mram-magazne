@@ -36,7 +36,7 @@ class Profile(models.Model):
                                 )
     super_profile = models.BooleanField(default=False)
     photo = models.ImageField(_('صورة'),
-                              default='default/default_profile.jpg', upload_to=img_func_profile)
+                              default='default/default_profile.png', upload_to=img_func_profile)
     created = models.DateTimeField(_("كتب في "), auto_now_add=True)
     updated = models.DateTimeField(_("عدل في"), auto_now=True)
     website = models.URLField(_('موقع إلكتوني'), blank=True)

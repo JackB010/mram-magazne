@@ -96,7 +96,7 @@ def reset_password(request):
                 template = render_to_string(
                     'email/code_confirm.html', {
                         'code': obj[0].code,
-                        'url': request.build_absolute_uri(f'/ar/profile/confirm_code_reset/{obj[0].id}/')
+                        'url': request.build_absolute_uri(f'/profile/confirm_code_reset/{obj[0].id}/')
                     })
                 email = EmailMessage('Code Confirm', template,
                                      'jackbill687@gmail.com', [user.email, ])

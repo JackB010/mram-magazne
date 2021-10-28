@@ -226,7 +226,6 @@ h4,
   box-shadow: 0 0 1px rgb(86, 12, 121);
   border-radius: 3px;
 }
-
 .ask_for_delete div {
   color: white;
   padding-top: 14px;
@@ -237,7 +236,6 @@ h4,
   margin-left: 30%;
   background: rgb(251, 27, 27);
 }
-
 #cansole {
   margin-left: -30%;
   background: rgb(25, 182, 25);
@@ -247,13 +245,11 @@ h4,
   color: rgb(204, 3, 3);
   box-shadow: 0 0 0 rgb(204, 3, 3);
 }
-
 #cansole:hover {
   background: white;
   color: green;
   box-shadow: 0 0 0 green;
 }
-
 .ask_for_delete button {
   cursor: pointer;
   padding: 0.5rem 1.5rem;
@@ -266,7 +262,6 @@ h4,
   bottom: -10%;
   transform: translate(-50%, -10%);
 }
-
 .open {
   opacity: 1;
   pointer-events: all;
@@ -738,28 +733,26 @@ legend {
   font-size: 30px;
 }
 #sub_title {
-  border-left: 3px dashed rgb(56, 14, 58);
-  border-right: 3px dashed rgb(56, 14, 58);
-  border-bottom: 3px solid rgb(56, 14, 58);
-  border-top: 3px solid rgb(56, 14, 58);
+  border: 1px solid rgb(56, 14, 58);
   text-align: justify;
   font-size: 16px;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: transparent;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 12px;
   width: 96%;
   margin: 0 auto;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  color: rgb(56, 14, 58);
 }
-
 #post_body {
   text-align: justify;
   margin: 0 auto;
   color: black;
-  width: 90%;
-  padding: 0 10px;
-  border-left: 2px solid rgb(56, 14, 58);
-  border-right: 2px solid rgb(56, 14, 58);
+  font-weight: 500;
+  word-spacing: 7px;
+  font-size: 17px;
+  width: 96%;
+  padding: 20px;
 }
 
 footer > p {

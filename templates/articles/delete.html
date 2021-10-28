@@ -8,6 +8,6 @@ editing on {{ post.title }}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <p>do you want to delete {{ post.title }}?</p>
-    <input type="submit" value="Conform">
+    <input type="submit" value="تأكيد">
 </form>
 {% endblock %}
